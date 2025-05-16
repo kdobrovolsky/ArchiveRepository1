@@ -1,46 +1,55 @@
 import { useState } from "react";
 import "./App.css";
 import { Task, TodoListItem } from "./components/TodoListItem";
+import { v1 } from "uuid";
 
-export type FilterValues = 'all' | 'active' | 'completed'
+export type FilterValues = "all" | "active" | "completed";
 
 function App() {
   let [tasks, setTasks] = useState<Task[]>([
-    { id: 1, title: "HTML&CSS", isDone: true },
-    { id: 2, title: "JS", isDone: true },
-    { id: 3, title: "ReactJS", isDone: false },
-    { id: 4, title: "Redux", isDone: false },
-  ]) 
+    { id: v1(), title: "HTML&CSS", isDone: true },
+    { id: v1(), title: "JS", isDone: true },
+    { id: v1(), title: "ReactJS", isDone: false },
+    { id: v1(), title: "Redux", isDone: false },
+  ]);
 
-  let [filter, setFilter] = useState<FilterValues>('all')
+  let [filter, setFilter] = useState<FilterValues>("all");
 
   //Удаление тасок
-  const deleteTasks = (taskId:number) => {
-   let deleteTask = tasks.filter(task => task.id !== taskId)
-   setTasks(deleteTask)
-  }
+  const deleteTasks = (taskId: string) => {
+    let deleteTask = tasks.filter((task) => task.id !== taskId);
+    setTasks(deleteTask);
+  };
 
-  let filteredTask = tasks
-  if(filter === 'active'){
-    filteredTask = tasks.filter(t => t.isDone !== false)
+  //Фильтрация тасок
+  let filteredTask = tasks;
+  if (filter === "active") {
+    filteredTask = tasks.filter((t) => t.isDone !== false);
   }
-  if(filter === 'completed'){
-    filteredTask = tasks.filter(t => t.isDone !== true)
+  if (filter === "completed") {
+    filteredTask = tasks.filter((t) => t.isDone !== true);
   }
-
   const changeFilter = (filter: FilterValues) => {
-    setFilter(filter)
+    setFilter(filter);
+  };
+
+  //Создание таски
+  const createTasks = (title:string) => {
+    const newTask = { id: v1(), title: title, isDone: false }
+    const newTasks = [ newTask,...tasks]
+    setTasks(newTasks)
+   
   }
 
   return (
     <div className="app">
       <TodoListItem
-       tasks={filteredTask} 
-       title={"TodoList"} 
-       deleteTasks={deleteTasks}
-       changeFilter={changeFilter}
-       />
-       
+        tasks={filteredTask}
+        title={"TodoList"}
+        deleteTasks={deleteTasks}
+        changeFilter={changeFilter}
+        createTasks={createTasks}
+      />
     </div>
   );
 }

@@ -1,11 +1,8 @@
-
 type ButtonPropsType = {
-    title: string
-    onClick?: () => void
-}
+  title: string;
+  onClick?: () => void;
+};
 
-export const Button = ({title,onClick}:ButtonPropsType) => {
-    return(
-        <button onClick={onClick} >{title}</button>
-    )
-}
+export const Button = ({ title, onClick }: ButtonPropsType) => {
+  return <button onClick={onClick}>{title}</button>;
+};
