@@ -29,11 +29,12 @@ export const TodoListItem = ({
 
    //Функция обработки button
     const onClickButtonHandler = () => {
-        if(taskTitle === ''){
-            return
+      const trimmedTitle = taskTitle.trim()
+        if(trimmedTitle !== ''){
+          createTasks(trimmedTitle)
+          setTaskTitle('')
         }
-        createTasks(taskTitle)
-        setTaskTitle('')
+        
         
     }
     
