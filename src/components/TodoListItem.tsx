@@ -13,7 +13,8 @@ type TodoListPropsType = {
   title: string;
   deleteTasks: (taskId: string) => void;
   changeFilter: (filter: FilterValues) => void;
-  createTasks: (title:string) => void
+  createTasks: (title:string) => void,
+  changeTaskStatus: (taskId: string, isDone: boolean) => void
 };
 
 export const TodoListItem = ({
@@ -22,6 +23,7 @@ export const TodoListItem = ({
   deleteTasks,
   changeFilter,
   createTasks,
+  changeTaskStatus,
 }: TodoListPropsType) => {
    const [taskTitle, setTaskTitle] = useState('')
 
@@ -39,12 +41,15 @@ export const TodoListItem = ({
     const onChangeInputHandler = (event:ChangeEvent<HTMLInputElement>) => {
         setTaskTitle(event.currentTarget.value)
     }
-
+    //Функция отправления такси по enter
    const onKeyDownHandler = (e:React.KeyboardEvent<HTMLInputElement>) => {
         if(e.key === 'Enter'){
             createTasks(taskTitle)
+            setTaskTitle('')
         }
    }
+
+  
 
   return (
     <div>
@@ -64,12 +69,18 @@ export const TodoListItem = ({
       ) : (
         <ul>
           {tasks.map((task) => {
-           const deleteTasksHandler = () => {
+           const changeTaskStatusHandler = (e:ChangeEvent<HTMLInputElement>) => {
+            const newStatusValue = e.currentTarget.checked
+            changeTaskStatus(task.id, newStatusValue)
+            
+           }
+
+          const deleteTasksHandler = () => {
             deleteTasks(task.id)
            }
            return(
             <li key={task.id}>
-              <input type="checkbox" checked={task.isDone} />
+              <input type="checkbox" checked={task.isDone} onChange={changeTaskStatusHandler} />
               <span>{task.title}</span>
               <Button title={"X"} onClick={deleteTasksHandler} />
             </li>
