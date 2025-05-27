@@ -11,6 +11,7 @@ export type Task = {
 type TodoListPropsType = {
   tasks: Task[];
   title: string;
+  filter: FilterValues
   deleteTasks: (taskId: string) => void;
   changeFilter: (filter: FilterValues) => void;
   createTasks: (title:string) => void,
@@ -20,12 +21,14 @@ type TodoListPropsType = {
 export const TodoListItem = ({
   tasks,
   title,
+  filter,
   deleteTasks,
   changeFilter,
   createTasks,
   changeTaskStatus,
 }: TodoListPropsType) => {
    const [taskTitle, setTaskTitle] = useState('')
+   const [error, setError] = useState<string | null>(null)
 
    //Функция обработки button
     const onClickButtonHandler = () => {
@@ -33,6 +36,8 @@ export const TodoListItem = ({
         if(trimmedTitle !== ''){
           createTasks(trimmedTitle)
           setTaskTitle('')
+        }else{
+          setError('Title is required')
         }
         
         
@@ -41,6 +46,7 @@ export const TodoListItem = ({
     //Функция обработки инпут
     const onChangeInputHandler = (event:ChangeEvent<HTMLInputElement>) => {
         setTaskTitle(event.currentTarget.value)
+        setError(null)
     }
     //Функция отправления такси по enter
    const onKeyDownHandler = (e:React.KeyboardEvent<HTMLInputElement>) => {
@@ -57,6 +63,7 @@ export const TodoListItem = ({
       <h3>{title}</h3>
       <div>
         <input //input
+        className={error? 'error': ''}
         value={taskTitle} 
         onChange={onChangeInputHandler} 
         onKeyDown={onKeyDownHandler}/>
@@ -64,6 +71,7 @@ export const TodoListItem = ({
         <Button //button
         title={'+'} 
         onClick={onClickButtonHandler}/>
+        {error && <div className={'error-message'}>{error}</div>}
       </div>
       {tasks.length === 0 ? (
         <p>No tasks</p>
@@ -80,7 +88,7 @@ export const TodoListItem = ({
             deleteTasks(task.id)
            }
            return(
-            <li key={task.id}>
+            <li key={task.id} className={task.isDone ? 'is-done':''}>
               <input type="checkbox" checked={task.isDone} onChange={changeTaskStatusHandler} />
               <span>{task.title}</span>
               <Button title={"X"} onClick={deleteTasksHandler} />
@@ -90,9 +98,9 @@ export const TodoListItem = ({
         </ul>
       )}
       <div>
-        <Button title={"All"} onClick={() => changeFilter("all")} />
-        <Button title={"Active"} onClick={() => changeFilter("active")} />
-        <Button title={"Completed"} onClick={() => changeFilter("completed")} />
+        <Button className={filter === 'all'? "active-filter":'' } title={"All"} onClick={() => changeFilter("all")} />
+        <Button className={filter === 'active'? "active-filter":'' } title={"Active"} onClick={() => changeFilter("active")} />
+        <Button className={filter === 'completed'? "active-filter":'' } title={"Completed"} onClick={() => changeFilter("completed")} />
       </div>
     </div>
   );

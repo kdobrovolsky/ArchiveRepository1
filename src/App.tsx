@@ -22,7 +22,7 @@ function App() {
   };
 
   //Фильтрация тасок
-  let filteredTask = tasks;
+   let filteredTask = tasks;
   (filter === "active"? filteredTask = tasks.filter((t) => t.isDone !== false):''); 
   (filter === "completed"? filteredTask = tasks.filter((t) => t.isDone == false):'') 
   const changeFilter = (filter: FilterValues) => {
@@ -53,8 +53,8 @@ function App() {
         deleteTasks={deleteTasks}
         changeFilter={changeFilter}
         createTasks={createTasks}
-        changeTaskStatus ={changeTaskStatus}
-      />
+        changeTaskStatus={changeTaskStatus} 
+        filter={filter}      />
     </div>
   );
 }
